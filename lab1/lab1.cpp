@@ -15,6 +15,7 @@
 #include <random>
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
 
 using namespace std;
 
@@ -293,6 +294,29 @@ string randomWalk(const DirectedGraph &G, int maxSteps=1000) {
     return oss.str();
 }
 
+// 可选功能 1：将有向图保存为图形文件
+static void saveGraphAsImage(const DirectedGraph &G, const std::string &outputDir) {
+    // 创建输出目录
+    std::filesystem::create_directories(outputDir);
+    std::string dotPath = outputDir + "/graph.dot";
+    std::ofstream ofs(dotPath);
+    ofs << "digraph G {\n";
+    for (auto &u : G.nodes()) {
+        ofs << "  \"" << u << "\";\n";
+    }
+    for (auto &u : G.nodes()) {
+        for (auto &e : G.outgoing(u)) {
+            ofs << "  \"" << u << "\" -> \"" << e.first << "\" [label=\"" << e.second << "\"];\n";
+        }
+    }
+    ofs << "}\n";
+    ofs.close();
+    // 调用 Graphviz 生成 PNG
+    std::string cmd = "dot -Tpng " + dotPath + " -o " + outputDir + "/graph.png";
+    system(cmd.c_str());
+    std::cout << "Graph image saved to " << outputDir << "/graph.png\n";
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -318,11 +342,15 @@ int main() {
              << "4. 计算最短路径\n"
              << "5. 计算 PageRank\n"
              << "6. 随机游走\n"
+             << "7. 导出图形文件\n"
              << "0. 退出\n"
              << ">> ";
         string cmd;
         getline(cin, cmd);
-        if (cmd=="0") break;
+        if (cmd=="7") {
+            saveGraphAsImage(G, "output");
+        }
+        else if (cmd=="0") break;
         else if (cmd=="1") showDirectedGraph(G);
         else if (cmd=="2") {
             cout << "word1 = ";

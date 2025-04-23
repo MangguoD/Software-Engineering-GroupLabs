@@ -339,7 +339,7 @@ int main() {
              << "1. 展示有向图\n"
              << "2. 查询桥接词\n"
              << "3. 根据桥接词生成新文本\n"
-             << "4. 计算最短路径\n"
+             << "4. 计算最短路径（输入一或二个单词）\n"
              << "5. 计算 PageRank\n"
              << "6. 随机游走\n"
              << "7. 导出图形文件\n"
@@ -366,11 +366,29 @@ int main() {
             cout << generateNewText(G,line) << "\n";
         }
         else if (cmd=="4") {
-            cout << "起点 = ";
-            string s,t;
-            cin >> s >> t;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << calcShortestPath(G,s,t) << "\n";
+            // 可选功能：单个或两个单词
+            cout << "请输入一个单词，或两个单词（以空格分隔）：";
+            string line;
+            getline(cin, line);
+            istringstream iss(line);
+            vector<string> parts;
+            string w;
+            while (iss >> w) parts.push_back(w);
+            if (parts.empty()) {
+                cout << "输入不能为空。\n";
+            } else if (parts.size() == 1) {
+                string src = parts[0];
+                if (!G.hasNode(src)) {
+                    cout << "节点 " << src << " 不在图中。\n";
+                } else {
+                    for (auto &dst : G.nodes()) {
+                        if (dst == src) continue;
+                        cout << calcShortestPath(G, src, dst) << "\n";
+                    }
+                }
+            } else {
+                cout << calcShortestPath(G, parts[0], parts[1]) << "\n";
+            }
         }
         else if (cmd=="5") {
             cout << "单词 = ";

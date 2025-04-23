@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
+#include <iomanip>
 
 using namespace std;
 
@@ -107,20 +108,51 @@ DirectedGraph buildGraph(const string &text) {
 
 // 功能 1：展示有向图
 void showDirectedGraph(const DirectedGraph &G) {
+    // Determine column widths
+    size_t nameWidth = 0;
     for (auto &u : G.nodes()) {
-        cout << u << " -> ";
+        nameWidth = max(nameWidth, u.size());
+    }
+    // Header border
+    string border = "+" + string(nameWidth + 2, '-') + "+" + string(50, '-') + "+";
+    cout << border << "\n";
+    // Title row
+    string title = " 有向图结构 ";
+    size_t totalWidth = nameWidth + 2 + 50 + 2;
+    size_t padLeft = (totalWidth - title.size()) / 2;
+    cout << "|" << string(padLeft - 1, ' ') << title
+         << string(totalWidth - padLeft - title.size() + 1, ' ')
+         << "|\n";
+    cout << border << "\n";
+    // Each node
+    for (auto &u : G.nodes()) {
         auto &outs = G.outgoing(u);
+        // First line for node
+        ostringstream cell;
+        cell << " " << setw(nameWidth) << left << u << " ";
         if (outs.empty()) {
-            cout << "(无出边)\n";
+            cout << "|" << cell.str() << "|" << string(50, ' ') << "|\n";
         } else {
             bool first = true;
             for (auto &e : outs) {
-                if (!first) cout << ", ";
-                cout << e.first << "(" << e.second << ")";
-                first = false;
+                ostringstream edge;
+                if (first) {
+                    edge << "-> " << e.first << " (权重=" << e.second << ")";
+                    first = false;
+                } else {
+                    edge << "   " << e.first << " (权重=" << e.second << ")";
+                }
+                string edgeStr = edge.str();
+                // pad edgeStr to width 50
+                if (edgeStr.size() < 50) edgeStr += string(50 - edgeStr.size(), ' ');
+                cout << "|" << cell.str() << "|" << edgeStr << "|\n";
+                // clear cell for subsequent lines
+                cell.str("");
+                cell.clear();
+                cell << " " << setw(nameWidth) << left << "" << " ";
             }
-            cout << "\n";
         }
+        cout << border << "\n";
     }
 }
 

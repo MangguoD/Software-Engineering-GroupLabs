@@ -349,6 +349,51 @@ static void saveGraphAsImage(const DirectedGraph &G, const std::string &outputDi
     std::cout << "Graph image saved to " << outputDir << "/graph.png\n";
 }
 
+// 可选功能：交互式随机游走并保存到文件
+static void interactiveRandomWalk(const DirectedGraph &G, int maxSteps = 1000) {
+    std::filesystem::create_directories("output");
+    std::ofstream ofs("output/random_walk.txt");
+    auto ns = G.nodes();
+    if (ns.empty()) {
+        std::cout << "图为空，无法执行随机游走。\n";
+        return;
+    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    // 随机选择起始节点
+    std::uniform_int_distribution<> startDis(0, ns.size() - 1);
+    std::string cur = ns[startDis(gen)];
+    ofs << cur;
+    std::cout << "起始节点: " << cur << "\n";
+    for (int i = 0; i < maxSteps; ++i) {
+        const auto &outs = G.outgoing(cur);
+        if (outs.empty()) {
+            std::cout << "节点 " << cur << " 无出边，随机游走结束。\n";
+            break;
+        }
+        int total = 0;
+        for (auto &e : outs) total += e.second;
+        std::uniform_int_distribution<> dis(0, total - 1);
+        int r = dis(gen), cum = 0;
+        std::string next;
+        for (auto &e : outs) {
+            cum += e.second;
+            if (r < cum) { next = e.first; break; }
+        }
+        std::cout << "下一个节点: " << next << "，按 Enter 继续，输入 q 回车退出...";
+        std::string input;
+        std::getline(std::cin, input);
+        if (!input.empty() && (input[0]=='q' || input[0]=='Q')) {
+            std::cout << "用户退出随机游走。\n";
+            break;
+        }
+        ofs << " -> " << next;
+        cur = next;
+    }
+    ofs.close();
+    std::cout << "随机游走路径已保存为 output/random_walk.txt\n";
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -431,8 +476,7 @@ int main() {
             cout << w << " 的 PageRank = " << pr << "\n";
         }
         else if (cmd=="6") {
-            cout << "随机游走结果：\n"
-                 << randomWalk(G) << "\n";
+            interactiveRandomWalk(G);
         }
         else {
             cout << "无效选项\n";

@@ -1,0 +1,366 @@
+//
+// Created by MangguoD on 25-4-23.
+//
+
+// Lab1Experiment1.cpp
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <limits>
+#include <random>
+#include <algorithm>
+#include <cctype>
+
+using namespace std;
+
+// 有向图类
+class DirectedGraph {
+public:
+    // 添加节点
+    void addNode(const string &u) {
+        out[u]; in[u];
+    }
+    // 添加边 u->v，权重自增
+    void addEdge(const string &u, const string &v) {
+        addNode(u); addNode(v);
+        out[u][v]++;
+        in[v][u]++;
+    }
+    bool hasNode(const string &u) const {
+        return out.count(u);
+    }
+    vector<string> nodes() const {
+        vector<string> vs;
+        vs.reserve(out.size());
+        for (auto &p : out) vs.push_back(p.first);
+        return vs;
+    }
+    int nodeCount() const {
+        return out.size();
+    }
+    // 出边映射 v->weight
+    const unordered_map<string,int>& outgoing(const string &u) const {
+        static const unordered_map<string,int> empty;
+        auto it = out.find(u);
+        return it==out.end() ? empty : it->second;
+    }
+    // 入边映射 v->weight
+    const unordered_map<string,int>& incoming(const string &u) const {
+        static const unordered_map<string,int> empty;
+        auto it = in.find(u);
+        return it==in.end() ? empty : it->second;
+    }
+    // 边数（权重和）
+    int edgeCount() const {
+        int sum = 0;
+        for (auto &p : out)
+            for (auto &e : p.second)
+                sum += e.second;
+        return sum;
+    }
+
+private:
+    unordered_map<string, unordered_map<string,int>> out, in;
+};
+
+// 将原始文本预处理：转小写、非字母替换为空格、分词
+vector<string> preprocess(const string &raw) {
+    vector<string> words;
+    string t;
+    for (char c : raw) {
+        if (isalpha(c)) t += tolower(c);
+        else t += ' ';
+    }
+    istringstream iss(t);
+    while (iss >> t) words.push_back(t);
+    return words;
+}
+
+// 从文件读入整个文本
+bool readFile(const string &path, string &out) {
+    ifstream ifs(path);
+    if (!ifs) return false;
+    ostringstream oss;
+    oss << ifs.rdbuf();
+    out = oss.str();
+    return true;
+}
+
+// 构建图
+DirectedGraph buildGraph(const string &text) {
+    auto ws = preprocess(text);
+    DirectedGraph G;
+    string prev;
+    for (auto &w : ws) {
+        G.addNode(w);
+        if (!prev.empty()) G.addEdge(prev, w);
+        prev = w;
+    }
+    return G;
+}
+
+// 功能 1：展示有向图
+void showDirectedGraph(const DirectedGraph &G) {
+    for (auto &u : G.nodes()) {
+        cout << u << " -> ";
+        auto &outs = G.outgoing(u);
+        if (outs.empty()) {
+            cout << "(无出边)\n";
+        } else {
+            bool first = true;
+            for (auto &e : outs) {
+                if (!first) cout << ", ";
+                cout << e.first << "(" << e.second << ")";
+                first = false;
+            }
+            cout << "\n";
+        }
+    }
+}
+
+// 功能 2：查询桥接词
+string queryBridgeWords(const DirectedGraph &G,
+                        const string &w1, const string &w2) {
+    string a = w1, b = w2;
+    // 已在 preprocess 中是小写
+    if (!G.hasNode(a) || !G.hasNode(b))
+        return "No word1 or word2 in the graph!";
+    unordered_set<string> bridges;
+    for (auto &e : G.outgoing(a)) {
+        const string &mid = e.first;
+        if (G.outgoing(mid).count(b))
+            bridges.insert(mid);
+    }
+    if (bridges.empty())
+        return "No bridge words from " + a + " to " + b + "!";
+    ostringstream oss;
+    oss << "The bridge words from " << a << " to " << b << " are: ";
+    bool first = true;
+    for (auto &w : bridges) {
+        if (!first) oss << ", ";
+        oss << w;
+        first = false;
+    }
+    oss << ".";
+    return oss.str();
+}
+
+// 功能 3：根据桥接词生成新文本
+string generateNewText(const DirectedGraph &G, const string &input) {
+    auto words = preprocess(input);
+    vector<string> out;
+    random_device rd;
+    mt19937 gen(rd());
+    for (size_t i = 0; i < words.size(); ++i) {
+        out.push_back(words[i]);
+        if (i+1 < words.size()) {
+            vector<string> bridges;
+            // 找出 words[i] -> mid -> words[i+1]
+            for (auto &e : G.outgoing(words[i])) {
+                const string &mid = e.first;
+                if (G.outgoing(mid).count(words[i+1]))
+                    bridges.push_back(mid);
+            }
+            if (!bridges.empty()) {
+                uniform_int_distribution<> dis(0, bridges.size()-1);
+                out.push_back(bridges[dis(gen)]);
+            }
+        }
+    }
+    // 合并输出
+    ostringstream oss;
+    for (size_t i = 0; i < out.size(); ++i) {
+        if (i) oss << ' ';
+        oss << out[i];
+    }
+    return oss.str();
+}
+
+// 功能 4：最短路径（Dijkstra）
+string calcShortestPath(const DirectedGraph &G,
+                        const string &src, const string &dst) {
+    if (!G.hasNode(src) || !G.hasNode(dst))
+        return "No such nodes in graph!";
+    const int INF = numeric_limits<int>::max();
+    unordered_map<string,int> dist;
+    unordered_map<string,string> prev;
+    for (auto &u : G.nodes()) dist[u] = INF;
+    dist[src] = 0;
+    // 小顶堆 (dist, node)
+    using P = pair<int,string>;
+    auto cmp = [](P &a, P &b){ return a.first > b.first; };
+    priority_queue<P, vector<P>, decltype(cmp)> pq(cmp);
+    pq.push({0, src});
+    while (!pq.empty()) {
+        auto [d,u] = pq.top(); pq.pop();
+        if (d > dist[u]) continue;
+        if (u == dst) break;
+        for (auto &e : G.outgoing(u)) {
+            const string &v = e.first;
+            int w = e.second;
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                prev[v] = u;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    if (dist[dst] == INF) return "Unreachable!";
+    // 重建路径
+    vector<string> path;
+    for (string at = dst; !at.empty(); at = prev[at]) {
+        path.push_back(at);
+        if (at == src) break;
+    }
+    reverse(path.begin(), path.end());
+    ostringstream oss;
+    oss << "Path: ";
+    for (size_t i = 0; i < path.size(); ++i) {
+        if (i) oss << " -> ";
+        oss << path[i];
+    }
+    oss << "\nLength: " << dist[dst];
+    return oss.str();
+}
+
+// 功能 5：PageRank
+double calPageRank(const DirectedGraph &G, const string &word) {
+    int N = G.nodeCount();
+    if (!N) return 0.0;
+    const double d = 0.85, eps = 1e-6;
+    unordered_map<string,double> pr, tmp;
+    double init = 1.0 / N;
+    for (auto &u : G.nodes()) pr[u] = init;
+    bool changed = true;
+    while (changed) {
+        changed = false;
+        for (auto &u : G.nodes()) {
+            double sum = 0;
+            for (auto &e : G.incoming(u)) {
+                const string &v = e.first;
+                sum += pr[v] / G.outgoing(v).size();
+            }
+            tmp[u] = (1-d)/N + d*sum;
+        }
+        for (auto &u : G.nodes()) {
+            if (fabs(tmp[u] - pr[u]) > eps) changed = true;
+            pr[u] = tmp[u];
+        }
+    }
+    return pr.count(word) ? pr[word] : 0.0;
+}
+
+// 功能 6：随机游走
+string randomWalk(const DirectedGraph &G, int maxSteps=1000) {
+    auto ns = G.nodes();
+    if (ns.empty()) return "";
+    random_device rd;
+    mt19937 gen(rd());
+    // 从第一个节点开始
+    string cur = ns[0];
+    vector<string> seq;
+    seq.push_back(cur);
+    unordered_set<string> seen;
+    for (int i = 0; i < maxSteps; ++i) {
+        auto &outs = G.outgoing(cur);
+        if (outs.empty()) break;
+        // 按权重随机选边
+        int total = 0;
+        for (auto &e : outs) total += e.second;
+        uniform_int_distribution<> dis(0, total-1);
+        int r = dis(gen), c = 0;
+        string next;
+        for (auto &e : outs) {
+            c += e.second;
+            if (r < c) { next = e.first; break; }
+        }
+        string edgeId = cur + "->" + next;
+        if (seen.count(edgeId)) break;
+        seen.insert(edgeId);
+        seq.push_back(next);
+        cur = next;
+    }
+    ostringstream oss;
+    for (size_t i = 0; i < seq.size(); ++i) {
+        if (i) oss << " -> ";
+        oss << seq[i];
+    }
+    return oss.str();
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cout << "请输入文本文件路径：";
+    string path;
+    getline(cin, path);
+    string text;
+    if (!readFile(path, text)) {
+        cerr << "读取文件失败！\n";
+        return 1;
+    }
+
+    auto G = buildGraph(text);
+    cout << "有向图已生成，共 " << G.nodeCount()
+         << " 个节点，" << G.edgeCount() << " 条有向边。\n";
+
+    while (true) {
+        cout << "\n选择功能:\n"
+             << "1. 展示有向图\n"
+             << "2. 查询桥接词\n"
+             << "3. 根据桥接词生成新文本\n"
+             << "4. 计算最短路径\n"
+             << "5. 计算 PageRank\n"
+             << "6. 随机游走\n"
+             << "0. 退出\n"
+             << ">> ";
+        string cmd;
+        getline(cin, cmd);
+        if (cmd=="0") break;
+        else if (cmd=="1") showDirectedGraph(G);
+        else if (cmd=="2") {
+            cout << "word1 = ";
+            string w1,w2;
+            cin >> w1 >> w2;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << queryBridgeWords(G,w1,w2) << "\n";
+        }
+        else if (cmd=="3") {
+            cout << "请输入一行文本：";
+            string line;
+            getline(cin, line);
+            cout << generateNewText(G,line) << "\n";
+        }
+        else if (cmd=="4") {
+            cout << "起点 = ";
+            string s,t;
+            cin >> s >> t;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << calcShortestPath(G,s,t) << "\n";
+        }
+        else if (cmd=="5") {
+            cout << "单词 = ";
+            string w;
+            cin >> w;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            double pr = calPageRank(G,w);
+            cout << w << " 的 PageRank = " << pr << "\n";
+        }
+        else if (cmd=="6") {
+            cout << "随机游走结果：\n"
+                 << randomWalk(G) << "\n";
+        }
+        else {
+            cout << "无效选项\n";
+        }
+    }
+
+    cout << "程序结束。\n";
+    return 0;
+}

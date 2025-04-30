@@ -13,14 +13,14 @@
 // 有向图类声明
 class DirectedGraph {
 public:
-    void addNode(const std::string &u);
-    void addEdge(const std::string &u, const std::string &v);
-    bool hasNode(const std::string &u) const;
-    std::vector<std::string> nodes() const;
-    int nodeCount() const;
-    const std::unordered_map<std::string,int>& outgoing(const std::string &u) const;
-    const std::unordered_map<std::string,int>& incoming(const std::string &u) const;
-    int edgeCount() const;
+    void addNode(const std::string &u); // 添加节点
+    void addEdge(const std::string &u, const std::string &v); // 添加 u->v 有向边
+    bool hasNode(const std::string &u) const; // 判断节点是否存在
+    std::vector<std::string> nodes() const; // 获取所有节点
+    int nodeCount() const; // 获取节点数量
+    const std::unordered_map<std::string,int>& outgoing(const std::string &u) const; // 出边
+    const std::unordered_map<std::string,int>& incoming(const std::string &u) const; // 入边
+    int edgeCount() const; // 所有边的总数（含权重）
 };
 
 // Lab1 功能函数封装

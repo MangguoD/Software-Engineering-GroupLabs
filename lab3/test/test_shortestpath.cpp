@@ -50,3 +50,33 @@ TEST(ShortestPathTest, SameNodePath) {
     EXPECT_EQ(Lab1::calcShortestPath(G, "x", "x"),
               "Path: x\nLength: 0");
 }
+
+// 测试用例1
+TEST(ShortestPathTest, SameNode) {
+    DirectedGraph G;
+    G.addNode("a");
+    EXPECT_EQ(Lab1::calcShortestPath(G, "a", "a"), "Path: a\nLength: 0");
+}
+
+// 测试用例2
+TEST(ShortestPathTest, NodeNotExist) {
+    DirectedGraph G;
+    G.addNode("a");
+    EXPECT_EQ(Lab1::calcShortestPath(G, "a", "d"), "No such nodes in graph!");
+}
+
+// 测试用例3
+TEST(ShortestPathTest, ReachablePath) {
+    DirectedGraph G;
+    G.addNode("a"); G.addNode("b"); G.addNode("d");
+    G.addEdge("a","b"); G.addEdge("b","d");
+    EXPECT_EQ(Lab1::calcShortestPath(G, "a", "d"),
+              "Path: a -> b -> d\nLength: 2");
+}
+
+// 测试用例4
+TEST(ShortestPathTest, Unreachable) {
+    DirectedGraph G;
+    G.addNode("a"); G.addNode("b"); G.addNode("c");
+    EXPECT_EQ(Lab1::calcShortestPath(G, "a", "c"), "Unreachable!");
+}

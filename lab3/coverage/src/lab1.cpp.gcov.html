@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2025-05-22 22:42:13</td>
+            <td class="headerValue">2025-05-22 23:59:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryLo">55.6&nbsp;%</td>
@@ -87,38 +87,38 @@
 <span id="L25"><span class="lineNum">      25</span>              : #include &quot;lab1.h&quot;</span>
 <span id="L26"><span class="lineNum">      26</span>              : </span>
 <span id="L27"><span class="lineNum">      27</span>              : // 添加节点</span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">         362 : void DirectedGraph::addNode(const std::string &amp;u) {</span></span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">         362 :     out[u]; in[u];</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">         362 : }</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">         146 : void DirectedGraph::addNode(const std::string &amp;u) {</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">         146 :     out[u]; in[u];</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">         146 : }</span></span>
 <span id="L31"><span class="lineNum">      31</span>              : </span>
 <span id="L32"><span class="lineNum">      32</span>              : // 添加边 u-&gt;v，权重自增</span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">         129 : void DirectedGraph::addEdge(const std::string &amp;u, const std::string &amp;v) {</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">         129 :     addNode(u);</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">         129 :     addNode(v);</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">         129 :     out[u][v]++;</span></span>
-<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">         129 :     in[v][u]++;</span></span>
-<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">         129 : }</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">          49 : void DirectedGraph::addEdge(const std::string &amp;u, const std::string &amp;v) {</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">          49 :     addNode(u);</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">          49 :     addNode(v);</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          49 :     out[u][v]++;</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">          49 :     in[v][u]++;</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">          49 : }</span></span>
 <span id="L39"><span class="lineNum">      39</span>              : </span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          65 : bool DirectedGraph::hasNode(const std::string &amp;u) const {</span></span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          65 :     return out.count(u);</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          32 : bool DirectedGraph::hasNode(const std::string &amp;u) const {</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          32 :     return out.count(u);</span></span>
 <span id="L42"><span class="lineNum">      42</span>              : }</span>
 <span id="L43"><span class="lineNum">      43</span>              : </span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           9 : std::vector&lt;std::string&gt; DirectedGraph::nodes() const {</span></span>
-<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           9 :     std::vector&lt;std::string&gt; vs;</span></span>
-<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           9 :     vs.reserve(out.size());</span></span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">          33 :     for (auto &amp;p : out) vs.push_back(p.first);</span></span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           9 :     return vs;</span></span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           9 : }</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           6 : std::vector&lt;std::string&gt; DirectedGraph::nodes() const {</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           6 :     std::vector&lt;std::string&gt; vs;</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">           6 :     vs.reserve(out.size());</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">          21 :     for (auto &amp;p : out) vs.push_back(p.first);</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           6 :     return vs;</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           6 : }</span></span>
 <span id="L50"><span class="lineNum">      50</span>              : </span>
 <span id="L51"><span class="lineNum">      51</span> <span class="tlaUNC">           0 : int DirectedGraph::nodeCount() const {</span></span>
 <span id="L52"><span class="lineNum">      52</span> <span class="tlaUNC">           0 :     return out.size();</span></span>
 <span id="L53"><span class="lineNum">      53</span>              : }</span>
 <span id="L54"><span class="lineNum">      54</span>              : </span>
 <span id="L55"><span class="lineNum">      55</span>              : // 出边映射 v-&gt;weight</span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          50 : const std::unordered_map&lt;std::string,int&gt;&amp; DirectedGraph::outgoing(const std::string &amp;u) const {</span></span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">          50 :     static const std::unordered_map&lt;std::string,int&gt; empty;</span></span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">          50 :     auto it = out.find(u);</span></span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          50 :     return it==out.end() ? empty : it-&gt;second;</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          22 : const std::unordered_map&lt;std::string,int&gt;&amp; DirectedGraph::outgoing(const std::string &amp;u) const {</span></span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">          22 :     static const std::unordered_map&lt;std::string,int&gt; empty;</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">          22 :     auto it = out.find(u);</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          22 :     return it==out.end() ? empty : it-&gt;second;</span></span>
 <span id="L60"><span class="lineNum">      60</span>              : }</span>
 <span id="L61"><span class="lineNum">      61</span>              : </span>
 <span id="L62"><span class="lineNum">      62</span>              : // 入边映射 v-&gt;weight</span>
@@ -138,17 +138,17 @@
 <span id="L76"><span class="lineNum">      76</span>              : }</span>
 <span id="L77"><span class="lineNum">      77</span>              : </span>
 <span id="L78"><span class="lineNum">      78</span>              : // 将原始文本预处理：转小写、非字母替换为空格、分词</span>
-<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">          20 : std::vector&lt;std::string&gt; Lab1::preprocess(const std::string &amp;raw) {</span></span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">          20 :     std::vector&lt;std::string&gt; words;</span></span>
-<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">          20 :     std::string t;</span></span>
-<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">         193 :     for (char c : raw) {</span></span>
-<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">         173 :         if (std::isalpha(c)) t += std::tolower(c);</span></span>
-<span id="L84"><span class="lineNum">      84</span> <span class="tlaGNC">          72 :         else t += ' ';</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           8 : std::vector&lt;std::string&gt; Lab1::preprocess(const std::string &amp;raw) {</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           8 :     std::vector&lt;std::string&gt; words;</span></span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">           8 :     std::string t;</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">          75 :     for (char c : raw) {</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">          67 :         if (std::isalpha(c)) t += std::tolower(c);</span></span>
+<span id="L84"><span class="lineNum">      84</span> <span class="tlaGNC">          28 :         else t += ' ';</span></span>
 <span id="L85"><span class="lineNum">      85</span>              :     }</span>
-<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">          20 :     std::istringstream iss(t);</span></span>
-<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">          97 :     while (iss &gt;&gt; t) words.push_back(t);</span></span>
-<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">          20 :     return words;</span></span>
-<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">          20 : }</span></span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">           8 :     std::istringstream iss(t);</span></span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">          39 :     while (iss &gt;&gt; t) words.push_back(t);</span></span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">           8 :     return words;</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">           8 : }</span></span>
 <span id="L90"><span class="lineNum">      90</span>              : </span>
 <span id="L91"><span class="lineNum">      91</span>              : // 从文件读入整个文本</span>
 <span id="L92"><span class="lineNum">      92</span> <span class="tlaUNC">           0 : bool Lab1::readFile(const std::string &amp;path, std::string &amp;out) {</span></span>
@@ -161,17 +161,17 @@
 <span id="L99"><span class="lineNum">      99</span> <span class="tlaUNC">           0 : }</span></span>
 <span id="L100"><span class="lineNum">     100</span>              : </span>
 <span id="L101"><span class="lineNum">     101</span>              : // 构建图</span>
-<span id="L102"><span class="lineNum">     102</span> <span class="tlaGNC">          20 : DirectedGraph Lab1::buildGraph(const std::string &amp;text) {</span></span>
-<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">          20 :     auto ws = preprocess(text);</span></span>
-<span id="L104"><span class="lineNum">     104</span> <span class="tlaGNC">          20 :     DirectedGraph G;</span></span>
-<span id="L105"><span class="lineNum">     105</span> <span class="tlaGNC">          20 :     std::string prev;</span></span>
-<span id="L106"><span class="lineNum">     106</span> <span class="tlaGNC">          97 :     for (auto &amp;w : ws) {</span></span>
-<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC">          77 :         G.addNode(w);</span></span>
-<span id="L108"><span class="lineNum">     108</span> <span class="tlaGNC">          77 :         if (!prev.empty()) G.addEdge(prev, w);</span></span>
-<span id="L109"><span class="lineNum">     109</span> <span class="tlaGNC">          77 :         prev = w;</span></span>
+<span id="L102"><span class="lineNum">     102</span> <span class="tlaGNC">           8 : DirectedGraph Lab1::buildGraph(const std::string &amp;text) {</span></span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">           8 :     auto ws = preprocess(text);</span></span>
+<span id="L104"><span class="lineNum">     104</span> <span class="tlaGNC">           8 :     DirectedGraph G;</span></span>
+<span id="L105"><span class="lineNum">     105</span> <span class="tlaGNC">           8 :     std::string prev;</span></span>
+<span id="L106"><span class="lineNum">     106</span> <span class="tlaGNC">          39 :     for (auto &amp;w : ws) {</span></span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC">          31 :         G.addNode(w);</span></span>
+<span id="L108"><span class="lineNum">     108</span> <span class="tlaGNC">          31 :         if (!prev.empty()) G.addEdge(prev, w);</span></span>
+<span id="L109"><span class="lineNum">     109</span> <span class="tlaGNC">          31 :         prev = w;</span></span>
 <span id="L110"><span class="lineNum">     110</span>              :     }</span>
-<span id="L111"><span class="lineNum">     111</span> <span class="tlaGNC">          20 :     return G;</span></span>
-<span id="L112"><span class="lineNum">     112</span> <span class="tlaGNC">          20 : }</span></span>
+<span id="L111"><span class="lineNum">     111</span> <span class="tlaGNC">           8 :     return G;</span></span>
+<span id="L112"><span class="lineNum">     112</span> <span class="tlaGNC">           8 : }</span></span>
 <span id="L113"><span class="lineNum">     113</span>              : </span>
 <span id="L114"><span class="lineNum">     114</span>              : // 功能 1：展示有向图</span>
 <span id="L115"><span class="lineNum">     115</span> <span class="tlaUNC">           0 : void Lab1::showDirectedGraph(const DirectedGraph &amp;G) {</span></span>
@@ -224,31 +224,31 @@
 <span id="L162"><span class="lineNum">     162</span> <span class="tlaUNC">           0 : }</span></span>
 <span id="L163"><span class="lineNum">     163</span>              : </span>
 <span id="L164"><span class="lineNum">     164</span>              : // 功能 2：查询桥接词</span>
-<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">          23 : std::string Lab1::queryBridgeWords(const DirectedGraph &amp;G,</span></span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">           9 : std::string Lab1::queryBridgeWords(const DirectedGraph &amp;G,</span></span>
 <span id="L166"><span class="lineNum">     166</span>              :                         const std::string &amp;w1, const std::string &amp;w2) {</span>
-<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">          23 :     std::string a = w1, b = w2;</span></span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">           9 :     std::string a = w1, b = w2;</span></span>
 <span id="L168"><span class="lineNum">     168</span>              :     // 已在 preprocess 中是小写</span>
-<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          23 :     if (!G.hasNode(a) || !G.hasNode(b))</span></span>
-<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">           8 :         return &quot;No word1 or word2 in the graph!&quot;;</span></span>
-<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">          15 :     std::unordered_set&lt;std::string&gt; bridges;</span></span>
-<span id="L172"><span class="lineNum">     172</span> <span class="tlaGNC">          35 :     for (auto &amp;e : G.outgoing(a)) {</span></span>
-<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC">          20 :         const std::string &amp;mid = e.first;</span></span>
-<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">          20 :         if (G.outgoing(mid).count(b))</span></span>
-<span id="L175"><span class="lineNum">     175</span> <span class="tlaGNC">          15 :             bridges.insert(mid);</span></span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">           9 :     if (!G.hasNode(a) || !G.hasNode(b))</span></span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">           3 :         return &quot;No word1 or word2 in the graph!&quot;;</span></span>
+<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">           6 :     std::unordered_set&lt;std::string&gt; bridges;</span></span>
+<span id="L172"><span class="lineNum">     172</span> <span class="tlaGNC">          14 :     for (auto &amp;e : G.outgoing(a)) {</span></span>
+<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC">           8 :         const std::string &amp;mid = e.first;</span></span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">           8 :         if (G.outgoing(mid).count(b))</span></span>
+<span id="L175"><span class="lineNum">     175</span> <span class="tlaGNC">           6 :             bridges.insert(mid);</span></span>
 <span id="L176"><span class="lineNum">     176</span>              :     }</span>
-<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">          15 :     if (bridges.empty())</span></span>
-<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">           5 :         return &quot;No bridge words from &quot; + a + &quot; to &quot; + b + &quot;!&quot;;</span></span>
-<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">          10 :     std::ostringstream oss;</span></span>
-<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">          10 :     oss &lt;&lt; &quot;The bridge words from &quot; &lt;&lt; a &lt;&lt; &quot; to &quot; &lt;&lt; b &lt;&lt; &quot; are: &quot;;</span></span>
-<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">          10 :     bool first = true;</span></span>
-<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          25 :     for (auto &amp;w : bridges) {</span></span>
-<span id="L183"><span class="lineNum">     183</span> <span class="tlaGNC">          15 :         if (!first) oss &lt;&lt; &quot;, &quot;;</span></span>
-<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">          15 :         oss &lt;&lt; w;</span></span>
-<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">          15 :         first = false;</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">           6 :     if (bridges.empty())</span></span>
+<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">           2 :         return &quot;No bridge words from &quot; + a + &quot; to &quot; + b + &quot;!&quot;;</span></span>
+<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">           4 :     std::ostringstream oss;</span></span>
+<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">           4 :     oss &lt;&lt; &quot;The bridge words from &quot; &lt;&lt; a &lt;&lt; &quot; to &quot; &lt;&lt; b &lt;&lt; &quot; are: &quot;;</span></span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">           4 :     bool first = true;</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          10 :     for (auto &amp;w : bridges) {</span></span>
+<span id="L183"><span class="lineNum">     183</span> <span class="tlaGNC">           6 :         if (!first) oss &lt;&lt; &quot;, &quot;;</span></span>
+<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">           6 :         oss &lt;&lt; w;</span></span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">           6 :         first = false;</span></span>
 <span id="L186"><span class="lineNum">     186</span>              :     }</span>
-<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">          10 :     oss &lt;&lt; &quot;.&quot;;</span></span>
-<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">          10 :     return oss.str();</span></span>
-<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          23 : }</span></span>
+<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">           4 :     oss &lt;&lt; &quot;.&quot;;</span></span>
+<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">           4 :     return oss.str();</span></span>
+<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">           9 : }</span></span>
 <span id="L190"><span class="lineNum">     190</span>              : </span>
 <span id="L191"><span class="lineNum">     191</span>              : // 功能 3：根据桥接词生成新文本</span>
 <span id="L192"><span class="lineNum">     192</span> <span class="tlaUNC">           0 : std::string Lab1::generateNewText(const DirectedGraph &amp;G, const std::string &amp;input) {</span></span>
@@ -282,51 +282,51 @@
 <span id="L220"><span class="lineNum">     220</span> <span class="tlaUNC">           0 : }</span></span>
 <span id="L221"><span class="lineNum">     221</span>              : </span>
 <span id="L222"><span class="lineNum">     222</span>              : // 功能 4：最短路径（Dijkstra）</span>
-<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          18 : std::string Lab1::calcShortestPath(const DirectedGraph &amp;G,</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          12 : std::string Lab1::calcShortestPath(const DirectedGraph &amp;G,</span></span>
 <span id="L224"><span class="lineNum">     224</span>              :                         const std::string &amp;src, const std::string &amp;dst) {</span>
-<span id="L225"><span class="lineNum">     225</span> <span class="tlaGNC">          18 :     if (!G.hasNode(src) || !G.hasNode(dst))</span></span>
-<span id="L226"><span class="lineNum">     226</span> <span class="tlaGNC">          15 :         return &quot;No such nodes in graph!&quot;;</span></span>
-<span id="L227"><span class="lineNum">     227</span> <span class="tlaGNC">          21 :     const int INF = std::numeric_limits&lt;int&gt;::max();</span></span>
-<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          21 :     std::unordered_map&lt;std::string,int&gt; dist;</span></span>
-<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          21 :     std::unordered_map&lt;std::string,std::string&gt; prev;</span></span>
-<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          45 :     for (auto &amp;u : G.nodes()) dist[u] = INF;</span></span>
-<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">           9 :     dist[src] = 0;</span></span>
+<span id="L225"><span class="lineNum">     225</span> <span class="tlaGNC">          12 :     if (!G.hasNode(src) || !G.hasNode(dst))</span></span>
+<span id="L226"><span class="lineNum">     226</span> <span class="tlaGNC">          10 :         return &quot;No such nodes in graph!&quot;;</span></span>
+<span id="L227"><span class="lineNum">     227</span> <span class="tlaGNC">          14 :     const int INF = std::numeric_limits&lt;int&gt;::max();</span></span>
+<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          14 :     std::unordered_map&lt;std::string,int&gt; dist;</span></span>
+<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          14 :     std::unordered_map&lt;std::string,std::string&gt; prev;</span></span>
+<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          29 :     for (auto &amp;u : G.nodes()) dist[u] = INF;</span></span>
+<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">           6 :     dist[src] = 0;</span></span>
 <span id="L232"><span class="lineNum">     232</span>              :     // 小顶堆 (dist, node)</span>
 <span id="L233"><span class="lineNum">     233</span>              :     using P = std::pair&lt;int,std::string&gt;;</span>
-<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">          12 :     auto cmp = [](P &amp;a, P &amp;b){ return a.first &gt; b.first; };</span></span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">           9 :     std::priority_queue&lt;P, std::vector&lt;P&gt;, decltype(cmp)&gt; pq(cmp);</span></span>
-<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          21 :     pq.push({0, src});</span></span>
-<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">          33 :     while (!pq.empty()) {</span></span>
-<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">          99 :         auto [d,u] = pq.top(); pq.pop();</span></span>
-<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">          48 :         if (d &gt; dist[u]) continue;</span></span>
-<span id="L240"><span class="lineNum">     240</span> <span class="tlaGNC">          21 :         if (u == dst) break;</span></span>
-<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">          48 :         for (auto &amp;e : G.outgoing(u)) {</span></span>
-<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">          18 :             const std::string &amp;v = e.first;</span></span>
-<span id="L243"><span class="lineNum">     243</span> <span class="tlaGNC">          18 :             int w = e.second;</span></span>
-<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">          18 :             if (dist[u] + w &lt; dist[v]) {</span></span>
-<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">          18 :                 dist[v] = dist[u] + w;</span></span>
-<span id="L246"><span class="lineNum">     246</span> <span class="tlaGNC">          18 :                 prev[v] = u;</span></span>
-<span id="L247"><span class="lineNum">     247</span> <span class="tlaGNC">          18 :                 pq.push({dist[v], v});</span></span>
-<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">          18 :             }</span></span>
+<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">           4 :     auto cmp = [](P &amp;a, P &amp;b){ return a.first &gt; b.first; };</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">           6 :     std::priority_queue&lt;P, std::vector&lt;P&gt;, decltype(cmp)&gt; pq(cmp);</span></span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          14 :     pq.push({0, src});</span></span>
+<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">          19 :     while (!pq.empty()) {</span></span>
+<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">          49 :         auto [d,u] = pq.top(); pq.pop();</span></span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">          26 :         if (d &gt; dist[u]) continue;</span></span>
+<span id="L240"><span class="lineNum">     240</span> <span class="tlaGNC">          12 :         if (u == dst) break;</span></span>
+<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">          24 :         for (auto &amp;e : G.outgoing(u)) {</span></span>
+<span id="L242"><span class="lineNum">     242</span> <span class="tlaGNC">           8 :             const std::string &amp;v = e.first;</span></span>
+<span id="L243"><span class="lineNum">     243</span> <span class="tlaGNC">           8 :             int w = e.second;</span></span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaGNC">           8 :             if (dist[u] + w &lt; dist[v]) {</span></span>
+<span id="L245"><span class="lineNum">     245</span> <span class="tlaGNC">           8 :                 dist[v] = dist[u] + w;</span></span>
+<span id="L246"><span class="lineNum">     246</span> <span class="tlaGNC">           8 :                 prev[v] = u;</span></span>
+<span id="L247"><span class="lineNum">     247</span> <span class="tlaGNC">           8 :                 pq.push({dist[v], v});</span></span>
+<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">           8 :             }</span></span>
 <span id="L249"><span class="lineNum">     249</span>              :         }</span>
-<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          24 :     }</span></span>
-<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">           3 :     if (dist[dst] == INF) return &quot;Unreachable!&quot;;</span></span>
+<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          13 :     }</span></span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">           2 :     if (dist[dst] == INF) return &quot;Unreachable!&quot;;</span></span>
 <span id="L252"><span class="lineNum">     252</span>              :     // 重建路径</span>
-<span id="L253"><span class="lineNum">     253</span> <span class="tlaGNC">           6 :     std::vector&lt;std::string&gt; path;</span></span>
-<span id="L254"><span class="lineNum">     254</span> <span class="tlaGNC">          18 :     for (std::string at = dst; !at.empty(); at = prev[at]) {</span></span>
-<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC">          12 :         path.push_back(at);</span></span>
-<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC">          12 :         if (at == src) break;</span></span>
-<span id="L257"><span class="lineNum">     257</span> <span class="tlaGNC">           6 :     }</span></span>
-<span id="L258"><span class="lineNum">     258</span> <span class="tlaGNC">           6 :     std::reverse(path.begin(), path.end());</span></span>
-<span id="L259"><span class="lineNum">     259</span> <span class="tlaGNC">           6 :     std::ostringstream oss;</span></span>
-<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC">           6 :     oss &lt;&lt; &quot;Path: &quot;;</span></span>
-<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          18 :     for (size_t i = 0; i &lt; path.size(); ++i) {</span></span>
-<span id="L262"><span class="lineNum">     262</span> <span class="tlaGNC">          12 :         if (i) oss &lt;&lt; &quot; -&gt; &quot;;</span></span>
-<span id="L263"><span class="lineNum">     263</span> <span class="tlaGNC">          12 :         oss &lt;&lt; path[i];</span></span>
-<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">          12 :     }</span></span>
-<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC">           6 :     oss &lt;&lt; &quot;\nLength: &quot; &lt;&lt; dist[dst];</span></span>
-<span id="L266"><span class="lineNum">     266</span> <span class="tlaGNC">           6 :     return oss.str();</span></span>
-<span id="L267"><span class="lineNum">     267</span> <span class="tlaGNC">          60 : }</span></span>
+<span id="L253"><span class="lineNum">     253</span> <span class="tlaGNC">           4 :     std::vector&lt;std::string&gt; path;</span></span>
+<span id="L254"><span class="lineNum">     254</span> <span class="tlaGNC">          12 :     for (std::string at = dst; !at.empty(); at = prev[at]) {</span></span>
+<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC">           8 :         path.push_back(at);</span></span>
+<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC">           8 :         if (at == src) break;</span></span>
+<span id="L257"><span class="lineNum">     257</span> <span class="tlaGNC">           4 :     }</span></span>
+<span id="L258"><span class="lineNum">     258</span> <span class="tlaGNC">           4 :     std::reverse(path.begin(), path.end());</span></span>
+<span id="L259"><span class="lineNum">     259</span> <span class="tlaGNC">           4 :     std::ostringstream oss;</span></span>
+<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC">           4 :     oss &lt;&lt; &quot;Path: &quot;;</span></span>
+<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          12 :     for (size_t i = 0; i &lt; path.size(); ++i) {</span></span>
+<span id="L262"><span class="lineNum">     262</span> <span class="tlaGNC">           8 :         if (i) oss &lt;&lt; &quot; -&gt; &quot;;</span></span>
+<span id="L263"><span class="lineNum">     263</span> <span class="tlaGNC">           8 :         oss &lt;&lt; path[i];</span></span>
+<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">           8 :     }</span></span>
+<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC">           4 :     oss &lt;&lt; &quot;\nLength: &quot; &lt;&lt; dist[dst];</span></span>
+<span id="L266"><span class="lineNum">     266</span> <span class="tlaGNC">           4 :     return oss.str();</span></span>
+<span id="L267"><span class="lineNum">     267</span> <span class="tlaGNC">          40 : }</span></span>
 <span id="L268"><span class="lineNum">     268</span>              : </span>
 <span id="L269"><span class="lineNum">     269</span>              : // 功能 5：PageRank</span>
 <span id="L270"><span class="lineNum">     270</span> <span class="tlaUNC">           0 : double Lab1::calPageRank(const DirectedGraph &amp;G, const std::string &amp;word) {</span></span>

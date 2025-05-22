@@ -39,3 +39,30 @@ TEST(BridgeWordsTest, WordNotFound) {
     EXPECT_EQ(Lab1::queryBridgeWords(G, "hello", "there"),
               "No word1 or word2 in the graph!");
 }
+
+// 测试用例1
+TEST(BridgeWordsTest, SingleBridgeWordExists) {
+    DirectedGraph G = Lab1::buildGraph("x y z");
+    EXPECT_EQ(Lab1::queryBridgeWords(G, "x", "z"), "The bridge words from x to z are: y.");
+}
+
+// 测试用例2
+TEST(BridgeWordsTest, NoBridgeWordsExist) {
+    DirectedGraph G = Lab1::buildGraph("x y z w");
+    EXPECT_EQ(Lab1::queryBridgeWords(G, "x", "w"), "No bridge words from x to w!");
+}
+
+// 测试用例3
+TEST(BridgeWordsTest, MultipleBridgeWordsExist) {
+    DirectedGraph G = Lab1::buildGraph("x u z x v z");
+    std::string result = Lab1::queryBridgeWords(G, "x", "z");
+    bool correctOrder = (result == "The bridge words from x to z are: u, v." ||
+                         result == "The bridge words from x to z are: v, u.");
+    EXPECT_TRUE(correctOrder);
+}
+
+// 测试用例4
+TEST(BridgeWordsTest, FirstWordNotExists) {
+    DirectedGraph G = Lab1::buildGraph("x y z");
+    EXPECT_EQ(Lab1::queryBridgeWords(G, "notexist", "z"), "No word1 or word2 in the graph!");
+}

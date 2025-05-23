@@ -8,10 +8,8 @@ from flask_caching import Cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
-from prometheus_flask_exporter import PrometheusMetrics
 
 from config import Config
-from db import init_db
 
 # 导入蓝图
 from routes import bp_auth, bp_tutor, bp_student, bp_recommend, bp_review, bp_qa
@@ -32,10 +30,7 @@ def create_app():
     # 缓存
     cache = Cache(app)
     # 限流
-    limiter = Limiter(app, key_func=get_remote_address)
-    # 指标
-    metrics = PrometheusMetrics(app)
-    metrics.info('app_info', 'Application info', version='1.0.0')
+    limiter = Limiter(key_func=get_remote_address, app=app)
 
     # 健康检查
     @app.route('/healthz')

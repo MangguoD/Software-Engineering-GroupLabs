@@ -1,17 +1,27 @@
 # routes/tutor.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 import sqlite3
-from db import get_db_connection, DB_TYPE
+from db import get_db_connection
+from config import Config
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_caching import Cache
 
 bp_tutor = Blueprint('tutor', __name__)
 
-@bp_tutor.route('/profile', methods=['POST'])
-def create_tutor_profile():
-    data = request.get_json()
-    if not data:
-        return jsonify({'success': False, 'message': '缺少请求数据'}), 400
+limiter = Limiter(key_func=get_remote_address)
+cache   = Cache()
 
+@bp_tutor.before_app_first_request
+def init_extensions():
+    limiter.init_app(current_app)
+    cache.init_app(current_app)
+
+@bp_tutor.route('/profile', methods=['POST'])
+@limiter.limit("10/minute")
+def create_tutor_profile():
+    data = request.get_json() or {}
     user_id    = data.get('user_id')
     subjects   = data.get('subjects')
     city       = data.get('city')
@@ -22,8 +32,8 @@ def create_tutor_profile():
     conn = get_db_connection()
     cur  = conn.cursor()
 
-    # 验证用户存在且角色为 tutor
-    if DB_TYPE == 'sqlite':
+    # 验证用户角色
+    if Config.DB_TYPE == 'sqlite':
         cur.execute("SELECT role FROM users WHERE id=?", (user_id,))
     else:
         cur.execute("SELECT role FROM users WHERE id=%s", (user_id,))
@@ -31,23 +41,22 @@ def create_tutor_profile():
     if not row:
         conn.close()
         return jsonify({'success': False, 'message': '用户不存在'}), 404
-
-    user_role = row[0]
-    if user_role != 'tutor':
+    role = row[0] if not hasattr(row, 'keys') else row['role']
+    if role != 'tutor':
         conn.close()
         return jsonify({'success': False, 'message': '只有家教用户可以创建家教信息'}), 403
 
-    # 检查是否已存在该用户的家教信息
-    if DB_TYPE == 'sqlite':
+    # 检查重复
+    if Config.DB_TYPE == 'sqlite':
         cur.execute("SELECT id FROM tutor_profile WHERE user_id=?", (user_id,))
     else:
         cur.execute("SELECT id FROM tutor_profile WHERE user_id=%s", (user_id,))
     if cur.fetchone():
         conn.close()
-        return jsonify({'success': False, 'message': '家教信息已存在，请勿重复创建'}), 400
+        return jsonify({'success': False, 'message': '家教信息已存在'}), 400
 
-    # 插入新的家教信息
-    if DB_TYPE == 'sqlite':
+    # 插入
+    if Config.DB_TYPE == 'sqlite':
         cur.execute(
             "INSERT INTO tutor_profile (user_id, subjects, city, description) VALUES (?, ?, ?, ?)",
             (user_id, subjects, city, description)
@@ -59,11 +68,12 @@ def create_tutor_profile():
         )
     conn.commit()
     conn.close()
-
     return jsonify({'success': True, 'message': '家教信息创建成功'})
 
 
 @bp_tutor.route('/', methods=['GET'])
+@limiter.limit("30/minute")
+@cache.cached(timeout=Config.CACHE_DEFAULT_TIMEOUT, query_string=True)
 def list_tutors():
     subject_filter = request.args.get('subject')
     city_filter    = request.args.get('city')
@@ -71,150 +81,103 @@ def list_tutors():
     conn = get_db_connection()
     cur  = conn.cursor()
 
+    # 构建带筛选的查询，同原逻辑
     if subject_filter and city_filter:
-        if DB_TYPE == 'sqlite':
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.subjects LIKE ? AND tp.city = ?"
-            )
-            cur.execute(query, ('%' + subject_filter + '%', city_filter))
-        else:
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.subjects LIKE %s AND tp.city = %s"
-            )
-            cur.execute(query, ('%' + subject_filter + '%', city_filter))
-
+        clause = "tp.subjects LIKE ? AND tp.city = ?" if Config.DB_TYPE=='sqlite' \
+                 else "tp.subjects LIKE %s AND tp.city = %s"
+        params = ('%'+subject_filter+'%', city_filter)
     elif subject_filter:
-        if DB_TYPE == 'sqlite':
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.subjects LIKE ?"
-            )
-            cur.execute(query, ('%' + subject_filter + '%',))
-        else:
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.subjects LIKE %s"
-            )
-            cur.execute(query, ('%' + subject_filter + '%',))
-
+        clause = "tp.subjects LIKE ?" if Config.DB_TYPE=='sqlite' else "tp.subjects LIKE %s"
+        params = ('%'+subject_filter+'%',)
     elif city_filter:
-        if DB_TYPE == 'sqlite':
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.city = ?"
-            )
-            cur.execute(query, (city_filter,))
-        else:
-            query = (
-                "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-                "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
-                "WHERE tp.city = %s"
-            )
-            cur.execute(query, (city_filter,))
-
+        clause = "tp.city = ?" if Config.DB_TYPE=='sqlite' else "tp.city = %s"
+        params = (city_filter,)
     else:
-        query = (
-            "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
-            "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id"
-        )
-        cur.execute(query)
+        clause = None
+        params = ()
 
+    base = (
+        "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
+        "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id"
+    )
+    if clause:
+        base += " WHERE " + clause
+
+    cur.execute(base, params)
     rows = cur.fetchall()
     conn.close()
 
-    tutors_list = []
-    for row in rows:
-        if isinstance(row, sqlite3.Row):
-            tutors_list.append(dict(row))
+    result = []
+    for r in rows:
+        if hasattr(r, 'keys'):
+            result.append(dict(r))
         else:
-            tutors_list.append({
-                'id':          row[0],
-                'subjects':    row[1],
-                'city':        row[2],
-                'description': row[3],
-                'user_id':     row[4],
-                'name':        row[5]
+            result.append({
+                'id':          r[0],
+                'subjects':    r[1],
+                'city':        r[2],
+                'description': r[3],
+                'user_id':     r[4],
+                'name':        r[5]
             })
-
-    return jsonify({'success': True, 'tutors': tutors_list})
+    return jsonify({'success': True, 'tutors': result})
 
 
 @bp_tutor.route('/<int:user_id>', methods=['GET'])
+@limiter.limit("30/minute")
+@cache.cached(timeout=Config.CACHE_DEFAULT_TIMEOUT)
 def get_tutor_detail(user_id):
     conn = get_db_connection()
     cur  = conn.cursor()
 
-    # 家教基本信息
-    if DB_TYPE == 'sqlite':
+    # 查询家教信息
+    if Config.DB_TYPE=='sqlite':
         cur.execute(
             "SELECT tp.id, tp.subjects, tp.city, tp.description, u.name "
-            "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id WHERE u.id = ?",
+            "FROM tutor_profile tp JOIN users u ON tp.user_id=u.id WHERE u.id=?",
             (user_id,)
         )
     else:
         cur.execute(
             "SELECT tp.id, tp.subjects, tp.city, tp.description, u.name "
-            "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id WHERE u.id = %s",
+            "FROM tutor_profile tp JOIN users u ON tp.user_id=u.id WHERE u.id=%s",
             (user_id,)
         )
     profile = cur.fetchone()
     if not profile:
         conn.close()
         return jsonify({'success': False, 'message': '未找到该家教信息'}), 404
-
-    # 组装家教信息
-    if isinstance(profile, sqlite3.Row):
-        tutor_info = dict(profile)
-    else:
-        tutor_info = {
-            'id':          profile[0],
-            'subjects':    profile[1],
-            'city':        profile[2],
-            'description': profile[3],
-            'name':        profile[4]
-        }
-    tutor_profile_id = tutor_info['id']
+    info = dict(profile) if hasattr(profile,'keys') else {
+        'id': profile[0],
+        'subjects': profile[1],
+        'city': profile[2],
+        'description': profile[3],
+        'name': profile[4]
+    }
+    tutor_profile_id = info['id']
 
     # 查询评价
-    if DB_TYPE == 'sqlite':
+    if Config.DB_TYPE=='sqlite':
         cur.execute(
             "SELECT r.rating, r.comment, u.name AS student_name "
-            "FROM review r JOIN users u ON r.student_id = u.id WHERE r.tutor_id = ?",
+            "FROM review r JOIN users u ON r.student_id=u.id WHERE r.tutor_id=?",
             (tutor_profile_id,)
         )
     else:
         cur.execute(
             "SELECT r.rating, r.comment, u.name AS student_name "
-            "FROM review r JOIN users u ON r.student_id = u.id WHERE r.tutor_id = %s",
+            "FROM review r JOIN users u ON r.student_id=u.id WHERE r.tutor_id=%s",
             (tutor_profile_id,)
         )
-    reviews_rows = cur.fetchall()
+    reviews = cur.fetchall()
     conn.close()
 
-    reviews_list = []
-    for row in reviews_rows:
-        if isinstance(row, sqlite3.Row):
-            reviews_list.append(dict(row))
-        else:
-            reviews_list.append({
-                'rating':       row[0],
-                'comment':      row[1],
-                'student_name': row[2]
-            })
-
-    # 计算平均评分
-    avg_rating = None
-    if reviews_list:
-        avg_rating = round(sum(r['rating'] for r in reviews_list) / len(reviews_list), 1)
-
-    tutor_info['reviews']        = reviews_list
-    tutor_info['average_rating'] = avg_rating
-
-    return jsonify({'success': True, 'tutor': tutor_info})
+    lst = []
+    for rv in reviews:
+        lst.append(dict(rv) if hasattr(rv,'keys') else {
+            'rating': rv[0], 'comment': rv[1], 'student_name': rv[2]
+        })
+    avg = round(sum(r['rating'] for r in lst)/len(lst),1) if lst else None
+    info['reviews'] = lst
+    info['average_rating'] = avg
+    return jsonify({'success': True, 'tutor': info})

@@ -1,13 +1,23 @@
 # routes/qa.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 bp_qa = Blueprint('qa', __name__)
 
+# Initialize limiter
+limiter = Limiter(key_func=get_remote_address)
+
+@bp_qa.before_app_first_request
+def init_extensions():
+    limiter.init_app(current_app)
+
 @bp_qa.route('/', methods=['GET'])
+@limiter.limit("30/minute")
 def qa():
     """
-    问答接口（简单规则匹配）：
+    问答接口（简单规则匹配 + 限流）：
     请求参数：?question=<用户提问>
     返回 JSON：
       成功：{"question": "<原问题>", "answer": "<返回回答>"}

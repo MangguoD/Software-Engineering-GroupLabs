@@ -1,18 +1,33 @@
 # routes/recommend.py
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, current_app
 import sqlite3
-from db import get_db_connection, DB_TYPE
+from db import get_db_connection
+from config import Config
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_caching import Cache
 
 bp_recommend = Blueprint('recommend', __name__)
 
+# Initialize limiter and cache
+limiter = Limiter(key_func=get_remote_address)
+cache = Cache()
+
+@bp_recommend.before_app_first_request
+def init_extensions():
+    limiter.init_app(current_app)
+    cache.init_app(current_app)
+
 @bp_recommend.route('/student/<int:student_id>', methods=['GET'])
+@limiter.limit("30/minute")
+@cache.cached(timeout=Config.CACHE_DEFAULT_TIMEOUT)
 def recommend_tutors(student_id):
     conn = get_db_connection()
     cur = conn.cursor()
 
     # 获取该学生发布的所有需求
-    if DB_TYPE == 'sqlite':
+    if Config.DB_TYPE == 'sqlite':
         cur.execute("SELECT subject, city FROM student_request WHERE user_id = ?", (student_id,))
     else:
         cur.execute("SELECT subject, city FROM student_request WHERE user_id = %s", (student_id,))
@@ -29,7 +44,7 @@ def recommend_tutors(student_id):
         else:
             subject, city = req[0], req[1]
 
-        if DB_TYPE == 'sqlite':
+        if Config.DB_TYPE == 'sqlite':
             cur.execute(
                 "SELECT tp.id, tp.subjects, tp.city, tp.description, u.id AS user_id, u.name "
                 "FROM tutor_profile tp JOIN users u ON tp.user_id = u.id "
@@ -52,12 +67,12 @@ def recommend_tutors(student_id):
             else:
                 tid = tutor[0]
                 tutor_data = {
-                    'id':          tutor[0],
-                    'subjects':    tutor[1],
-                    'city':        tutor[2],
+                    'id': tutor[0],
+                    'subjects': tutor[1],
+                    'city': tutor[2],
                     'description': tutor[3],
-                    'user_id':     tutor[4],
-                    'name':        tutor[5]
+                    'user_id': tutor[4],
+                    'name': tutor[5],
                 }
             if tid not in seen_tutors:
                 seen_tutors.add(tid)
@@ -66,14 +81,15 @@ def recommend_tutors(student_id):
     conn.close()
     return jsonify({'success': True, 'recommended_tutors': recommended})
 
-
 @bp_recommend.route('/tutor/<int:tutor_user_id>', methods=['GET'])
+@limiter.limit("30/minute")
+@cache.cached(timeout=Config.CACHE_DEFAULT_TIMEOUT)
 def recommend_students(tutor_user_id):
     conn = get_db_connection()
     cur = conn.cursor()
 
     # 获取家教的科目列表和城市
-    if DB_TYPE == 'sqlite':
+    if Config.DB_TYPE == 'sqlite':
         cur.execute("SELECT subjects, city FROM tutor_profile WHERE user_id = ?", (tutor_user_id,))
     else:
         cur.execute("SELECT subjects, city FROM tutor_profile WHERE user_id = %s", (tutor_user_id,))
@@ -95,7 +111,7 @@ def recommend_students(tutor_user_id):
 
     # 针对家教每个科目匹配学生需求
     for subj in subjects_list:
-        if DB_TYPE == 'sqlite':
+        if Config.DB_TYPE == 'sqlite':
             cur.execute(
                 "SELECT sr.id, sr.subject, sr.city, sr.description, u.id AS user_id, u.name "
                 "FROM student_request sr JOIN users u ON sr.user_id = u.id "
@@ -118,12 +134,12 @@ def recommend_students(tutor_user_id):
             else:
                 rid = req[0]
                 req_data = {
-                    'id':          req[0],
-                    'subject':     req[1],
-                    'city':        req[2],
+                    'id': req[0],
+                    'subject': req[1],
+                    'city': req[2],
                     'description': req[3],
-                    'user_id':     req[4],
-                    'name':        req[5]
+                    'user_id': req[4],
+                    'name': req[5],
                 }
             if rid not in seen_reqs:
                 seen_reqs.add(rid)

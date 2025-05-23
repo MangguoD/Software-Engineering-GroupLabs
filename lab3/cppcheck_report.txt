@@ -1,0 +1,170 @@
+src/lab1.cpp:9:0: information: Include file: <iostream> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <iostream>
+^
+src/lab1.cpp:10:0: information: Include file: <fstream> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <fstream>
+^
+src/lab1.cpp:11:0: information: Include file: <sstream> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <sstream>
+^
+src/lab1.cpp:12:0: information: Include file: <string> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <string>
+^
+src/lab1.cpp:13:0: information: Include file: <vector> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <vector>
+^
+src/lab1.cpp:14:0: information: Include file: <unordered_map> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <unordered_map>
+^
+src/lab1.cpp:15:0: information: Include file: <unordered_set> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <unordered_set>
+^
+src/lab1.cpp:16:0: information: Include file: <queue> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <queue>
+^
+src/lab1.cpp:17:0: information: Include file: <limits> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <limits>
+^
+src/lab1.cpp:18:0: information: Include file: <random> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <random>
+^
+src/lab1.cpp:19:0: information: Include file: <algorithm> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <algorithm>
+^
+src/lab1.cpp:20:0: information: Include file: <cctype> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <cctype>
+^
+src/lab1.cpp:21:0: information: Include file: <filesystem> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <filesystem>
+^
+src/lab1.cpp:22:0: information: Include file: <iomanip> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <iomanip>
+^
+src/lab1.cpp:23:0: information: Include file: <cmath> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <cmath>
+^
+src/lab1.cpp:24:0: information: Include file: <cstdlib> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <cstdlib>
+^
+src/lab1.h:8:0: information: Include file: <string> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <string>
+^
+src/lab1.h:9:0: information: Include file: <vector> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <vector>
+^
+src/lab1.h:10:0: information: Include file: <unordered_map> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <unordered_map>
+^
+src/lab1.h:11:0: information: Include file: <unordered_set> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <unordered_set>
+^
+src/lab1.cpp:0:0: information: Limiting analysis of branches. Use --check-level=exhaustive to analyze all branches. [normalCheckLevelMaxBranches]
+
+^
+src/lab1.cpp:47:16: style: Variable 'p' can be declared as reference to const [constVariableReference]
+    for (auto &p : out) vs.push_back(p.first);
+               ^
+src/lab1.cpp:72:16: style: Variable 'p' can be declared as reference to const [constVariableReference]
+    for (auto &p : out)
+               ^
+src/lab1.cpp:73:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : p.second)
+                   ^
+src/lab1.cpp:106:16: style: Variable 'w' can be declared as reference to const [constVariableReference]
+    for (auto &w : ws) {
+               ^
+src/lab1.cpp:118:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) {
+               ^
+src/lab1.cpp:133:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) {
+               ^
+src/lab1.cpp:142:24: style: Variable 'e' can be declared as reference to const [constVariableReference]
+            for (auto &e : outs) {
+                       ^
+src/lab1.cpp:172:16: style: Variable 'e' can be declared as reference to const [constVariableReference]
+    for (auto &e : G.outgoing(a)) {
+               ^
+src/lab1.cpp:182:16: style: Variable 'w' can be declared as reference to const [constVariableReference]
+    for (auto &w : bridges) {
+               ^
+src/lab1.cpp:202:24: style: Variable 'e' can be declared as reference to const [constVariableReference]
+            for (auto &e : G.outgoing(words[i])) {
+                       ^
+src/lab1.cpp:230:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) dist[u] = INF;
+               ^
+src/lab1.cpp:234:22: style: Parameter 'a' can be declared as reference to const [constParameterReference]
+    auto cmp = [](P &a, P &b){ return a.first > b.first; };
+                     ^
+src/lab1.cpp:234:28: style: Parameter 'b' can be declared as reference to const [constParameterReference]
+    auto cmp = [](P &a, P &b){ return a.first > b.first; };
+                           ^
+src/lab1.cpp:241:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : G.outgoing(u)) {
+                   ^
+src/lab1.cpp:276:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) pr[u] = init;
+               ^
+src/lab1.cpp:282:20: style: Variable 'v_pair' can be declared as reference to const [constVariableReference]
+        for (auto &v_pair : pr) {
+                   ^
+src/lab1.cpp:288:20: style: Variable 'u' can be declared as reference to const [constVariableReference]
+        for (auto &u : G.nodes()) {
+                   ^
+src/lab1.cpp:290:24: style: Variable 'e' can be declared as reference to const [constVariableReference]
+            for (auto &e : G.incoming(u)) {
+                       ^
+src/lab1.cpp:296:20: style: Variable 'u' can be declared as reference to const [constVariableReference]
+        for (auto &u : G.nodes()) {
+                   ^
+src/lab1.cpp:320:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : outs) total += e.second;
+                   ^
+src/lab1.cpp:324:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : outs) {
+                   ^
+src/lab1.cpp:349:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) {
+               ^
+src/lab1.cpp:352:16: style: Variable 'u' can be declared as reference to const [constVariableReference]
+    for (auto &u : G.nodes()) {
+               ^
+src/lab1.cpp:353:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : G.outgoing(u)) {
+                   ^
+src/lab1.cpp:388:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : outs) total += e.second;
+                   ^
+src/lab1.cpp:392:20: style: Variable 'e' can be declared as reference to const [constVariableReference]
+        for (auto &e : outs) {
+                   ^
+src/lab1.cpp:475:32: style: Variable 'dst' can be declared as reference to const [constVariableReference]
+                    for (auto &dst : G.nodes()) {
+                               ^
+src/lab1.cpp:47:28: style: Consider using std::transform algorithm instead of a raw loop. [useStlAlgorithm]
+    for (auto &p : out) vs.push_back(p.first);
+                           ^
+src/lab1.cpp:74:17: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+            sum += e.second;
+                ^
+src/lab1.cpp:119:19: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+        nameWidth = std::max(nameWidth, u.size());
+                  ^
+src/lab1.cpp:320:36: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+        for (auto &e : outs) total += e.second;
+                                   ^
+src/lab1.cpp:388:36: style: Consider using std::accumulate algorithm instead of a raw loop. [useStlAlgorithm]
+        for (auto &e : outs) total += e.second;
+                                   ^
+test/test_bridgewords.cpp:4:0: information: Include file: <gtest/gtest.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <gtest/gtest.h>
+^
+test/test_shortestpath.cpp:4:0: information: Include file: <gtest/gtest.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <gtest/gtest.h>
+^
+src/lab1.cpp:305:0: style: The function 'randomWalk' is never used. [unusedFunction]
+std::string Lab1::randomWalk(const DirectedGraph &G, int maxSteps) {
+^
+nofile:0:0: information: Active checkers: 179/856 (use --checkers-report=<filename> to see details) [checkersReport]
+

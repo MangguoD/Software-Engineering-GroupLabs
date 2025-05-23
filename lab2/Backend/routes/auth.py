@@ -1,10 +1,12 @@
 # routes/auth.py
 
 from flask import Blueprint, request, jsonify, current_app
+# 忽略这一行报错
 from db import get_db_connection
 from config import Config
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+# 忽略这一行报错
 from schemas import RegisterSchema, LoginSchema
 
 bp_auth = Blueprint('auth', __name__)

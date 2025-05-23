@@ -120,4 +120,16 @@
     }
   };
   </script>
-  
+  <style scoped>
+div {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+h3 {
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--bg-color);
+    padding-bottom: 0.5rem;
+}
+</style>

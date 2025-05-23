@@ -66,4 +66,14 @@
     }
   };
   </script>
-  
+  <style scoped>
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+form {
+    max-width: 400px;
+}
+</style>  

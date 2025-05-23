@@ -45,9 +45,16 @@
   };
   </script>
   
-  <style>
-  .qa-pair {
-    margin-bottom: 10px;
-  }
-  </style>
-  
+<style scoped>
+.qa-pair {
+    background: white;
+    padding: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+input {
+    width: 70%;
+    margin-right: 10px;
+}
+</style>

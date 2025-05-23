@@ -63,4 +63,25 @@
     }
   };
   </script>
-  
+  <style scoped>
+ul {
+    display: grid;
+    gap: 1rem;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+</style>

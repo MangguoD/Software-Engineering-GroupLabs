@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request, jsonify, current_app
 import sqlite3
+# 忽略这一行报错
 from db import get_db_connection
 from config import Config
 from flask_limiter import Limiter

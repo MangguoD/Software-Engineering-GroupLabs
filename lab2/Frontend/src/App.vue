@@ -128,16 +128,25 @@ button:hover {
 
 /* 列表样式 */
 ul {
+    background: var(--bg-color);
     list-style: none;
     padding: 0;
 }
 
-li {
-    background: var(--primary-color);
+ul li {
+    background: var(--bg-color);
+    color: var(--text-primary);
     /* padding: 1rem; */
     margin-bottom: 1rem;
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+ul li a {
+    /* font-size: 1.2rem; */
+    color: var(--text-primary) !important; 
+    text-decoration: none;
+    /* font-weight: bold; */
 }
 
 /* 消息提示 */
@@ -148,6 +157,7 @@ p[v-if^="message"] {
     margin-top: 1rem;
 }
 nav ul {
+  background-color: var(--primary-color) !important;
   list-style: none;
   padding: 0;
 }
